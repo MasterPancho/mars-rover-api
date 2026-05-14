@@ -1,0 +1,218 @@
+:root {
+    --bg-dark: #0b0e14;
+    --bg-card: #161b22;
+    --bg-input: #0d1117;
+    --border: #30363d;
+    --text-main: #c9d1d9;
+    --text-muted: #8b949e;
+    --accent: #f85149;
+    --rover: #ffffffd5;
+    --success: #238636;
+    --info: #1f6feb;
+    --warning: #9e7aff;
+    --gold: #f2cc60;
+    --transition: all 0.2s ease;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    margin: 0;
+}
+
+.legend { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+.main-layout { display: flex; gap: 2.5rem; justify-content: center; width: 100%; max-width: 1200px; }
+
+/* Map ID Grid */
+#map-container {
+    display: grid; background: var(--bg-input); border: 1px solid var(--border);
+    gap: 2px; padding: 8px; border-radius: 12px; cursor: crosshair; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+/* Cell class format */
+.cell {
+    width: 38px; height: 38px; background: var(--bg-card); display: flex;
+    align-items: center; justify-content: center; font-size: 1.2rem;
+    border-radius: 4px; transition: var(--transition);
+}
+
+/* Mouse hover effect */
+.cell:hover { background: var(--border); transform: scale(1.05); }
+
+/* Special cell states */
+.cell.mine { background: rgba(248, 81, 73, 0.1); border: 1px solid var(--accent); }
+.cell.path { color: var(--gold); text-shadow: 0 0 8px rgba(242, 204, 96, 0.5); }
+
+/* Rover current position format */
+.cell.current {
+    background: var(--rover); border-radius: 50%; transform: scale(0.85);
+    animation: pulse 2s infinite; z-index: 10;
+}
+
+/* Pulse animation for current position */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 var(--rover);}
+    70% { box-shadow: 0 0 0 12px rgba(248, 81, 73, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(248, 81, 73, 0); }
+}
+
+/* Sidebar & Buttons */
+
+/* Panel format for sidebar sections */
+.panel { background: var(--bg-card); padding: 1.5rem; border-radius: 16px; width: 340px; border: 1px solid var(--border); }
+
+/* Rover state format */
+.add-rover-ui { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+.rover-item { background: var(--bg-input); padding: 1rem; margin-bottom: 0.8rem; border-radius: 10px; border-left: 4px solid var(--border); }
+.rover-item.Finished { border-left-color: var(--success); }
+.rover-item.Eliminated { border-left-color: var(--accent); }
+.rover-item.Moving { border-left-color: var(--warning); }
+
+/* Button group format */
+.btn-group { display: flex; gap: 5px; margin-top: 10px; }
+button {
+    padding: 0.6rem; border-radius: 6px; border: none; cursor: pointer;
+    font-weight: 600; font-size: 0.75rem; text-transform: uppercase; transition: var(--transition);
+}
+
+/* Rover action buttons */
+.btn-dispatch { background: var(--success); color: white; flex: 2; }
+.btn-live { background: var(--warning); color: white; flex: 2; }
+.btn-delete { background: #333; color: var(--text-muted); flex: 1; }
+.btn-update-map { background: var(--info); color: white; padding: 0.6rem 1rem; }
+button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* Log Box */
+.log-box { width: 100%; max-width: 1000px; margin-top: 2rem; background: #000; padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); }
+.log-header { display: flex; justify-content: space-between; font-family: monospace; color: var(--text-muted); margin-bottom: 0.5rem; }
+pre { color: #3fb950; font-family: monospace; font-size: 0.85rem; margin: 0; overflow-y: auto; max-height: 150px; }
+.status-on { color: var(--success); }
+
+/* ── Live Control Panel ─────────────────────────────────── */
+.live-panel {
+    width: 100%;
+    max-width: 1200px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 0 24px rgba(248, 81, 73, 0.12);
+}
+.live-panel.hidden { display: none; }
+
+.live-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+.live-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+}
+.live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: blink 1s ease-in-out infinite;
+    flex-shrink: 0;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.15; }
+}
+.btn-disconnect {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: var(--transition);
+}
+.btn-disconnect:hover { background: var(--accent); color: white; transform: none; }
+
+.live-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+}
+
+/* ── D-pad ──────────────────────────────────────────────── */
+.dpad {
+    display: grid;
+    grid-template-areas:
+        ".    up   ."
+        "left def  right";
+    gap: 8px;
+}
+#btn-M { grid-area: up; }
+#btn-L { grid-area: left; }
+#btn-D { grid-area: def; }
+#btn-R { grid-area: right; }
+
+.dpad-btn {
+    width: 76px;
+    height: 76px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    transition: background 0.12s, border-color 0.12s, transform 0.1s;
+    line-height: 1;
+    user-select: none;
+}
+.dpad-btn span { font-size: 0.52rem; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 600; }
+.dpad-defuse   { border-color: var(--gold); color: var(--gold); }
+.dpad-defuse span { color: var(--gold); opacity: 0.7; }
+
+.dpad-btn:hover { background: var(--border); border-color: var(--warning); color: var(--warning); }
+.dpad-defuse:hover { border-color: var(--gold); color: var(--gold); }
+.dpad-btn:active { transform: scale(0.9); }
+
+@keyframes btnpress {
+    0%   { transform: scale(1);    background: var(--bg-input); border-color: var(--border); }
+    35%  { transform: scale(0.88); background: var(--warning);  border-color: var(--warning); color: white; }
+    100% { transform: scale(1);    background: var(--bg-input); border-color: var(--border); }
+}
+.dpad-btn.pressed { animation: btnpress 0.22s ease forwards; }
+
+/* ── Keyboard hints ─────────────────────────────────────── */
+.key-hints { display: flex; flex-direction: column; gap: 0.55rem; }
+.key-hints-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin: 0 0 0.3rem; }
+.key-row { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+kbd {
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: 0.72rem;
+    font-family: monospace;
+    color: var(--text-main);
+}

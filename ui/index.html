@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Rover Operator | HQ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>MARS OPERATOR</h1>
+    <div class="legend">
+        &nbsp; <b>CLICK</b> empty cell: add mine &nbsp;|&nbsp; <b>CLICK</b> 💣: remove mine
+    </div>
+
+    <div class="main-layout">
+        <section id="map-area">
+            <h3>Tactical Grid</h3>
+            <div id="map-container"></div>
+            <div class="map-controls">
+                <input type="number" id="w-input" value="12" title="Width">
+                <span>×</span>
+                <input type="number" id="h-input" value="12" title="Height">
+                <button class="btn-update-map" onclick="updateConfig()">Sync Map</button>
+            </div>
+        </section>
+
+        <aside class="panel">
+            <h3>Rover Management</h3>
+            <div class="add-rover-ui">
+                <input type="text" id="new-cmds" placeholder="Sequence (e.g., MMRMM)">
+                <button class="btn-dispatch" onclick="createRover()">Create</button>
+            </div>
+            <div id="rover-list"></div>
+        </aside>
+    </div>
+
+    <!-- Real-time control panel — only visible when a WebSocket session is active -->
+    <div id="live-panel" class="live-panel hidden">
+        <div class="live-header">
+            <div class="live-title">
+                <span class="live-dot"></span>
+                REMOTE CONTROL &mdash; <span id="live-unit-label">UNIT-000</span>
+            </div>
+            <button class="btn-disconnect" onclick="disconnectLive()">&#x2715; Disconnect</button>
+        </div>
+        <div class="live-body">
+            <div class="dpad">
+                <button class="dpad-btn" id="btn-M" onclick="sendCmd('M')" title="Move Forward (W / ↑ / Space)">
+                    &#9650;<br><span>MOVE</span>
+                </button>
+                <button class="dpad-btn" id="btn-L" onclick="sendCmd('L')" title="Turn Left (A / ←)">
+                    &#9664;<br><span>TURN LEFT</span>
+                </button>
+                <button class="dpad-btn dpad-defuse" id="btn-D" onclick="sendCmd('D')" title="Defuse Mine (F)">
+                    &#8855;<br><span>DEFUSE</span>
+                </button>
+                <button class="dpad-btn" id="btn-R" onclick="sendCmd('R')" title="Turn Right (D / →)">
+                    &#9654;<br><span>TURN RIGHT</span>
+                </button>
+            </div>
+            <div class="key-hints">
+                <p class="key-hints-title">Keyboard shortcuts</p>
+                <div class="key-row"><kbd>W</kbd> <kbd>&#8593;</kbd> <kbd>Space</kbd> &nbsp;Move forward</div>
+                <div class="key-row"><kbd>A</kbd> <kbd>&#8592;</kbd> &nbsp;Turn left</div>
+                <div class="key-row"><kbd>D</kbd> <kbd>&#8594;</kbd> &nbsp;Turn right</div>
+                <div class="key-row"><kbd>F</kbd> &nbsp;Defuse mine</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="log-box">
+        <div class="log-header">
+            <span>Terminal Output</span>
+            <span id="ws-indicator" class="status-off">Socket: Offline</span>
+        </div>
+        <pre id="json-display">> Initialize System... OK</pre>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="script.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+window.AZURE_URL = "AZURE_APP_SERVICE_URL";
+window.API_KEY   = "API_KEY";
