@@ -91,7 +91,11 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 .log-box { width: 100%; max-width: 1000px; margin-top: 2rem; background: #000; padding: 1.2rem; border-radius: 12px; border: 1px solid var(--border); }
 .log-header { display: flex; justify-content: space-between; font-family: monospace; color: var(--text-muted); margin-bottom: 0.5rem; }
 pre { color: #3fb950; font-family: monospace; font-size: 0.85rem; margin: 0; overflow-y: auto; max-height: 150px; }
-.status-on { color: var(--success); }
+.status-on  { color: var(--success); }
+.status-off { color: var(--text-muted); }
+
+.map-controls { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.8rem; }
+.map-controls input { width: 60px; background: var(--bg-input); border: 1px solid var(--border); color: var(--text-main); border-radius: 6px; padding: 0.4rem; text-align: center; font-size: 0.85rem; }
 
 /* ── Live Control Panel ─────────────────────────────────── */
 .live-panel {

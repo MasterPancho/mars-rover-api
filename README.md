@@ -110,6 +110,8 @@ docker push <your-acr>.azurecr.io/mars-rover:v1
 
 ## Configuration
 
+**Frontend — `ui/config.js`** (gitignored, never committed)
+
 Copy `ui/config.example.js` → `ui/config.js` and fill in your values:
 
 ```js
@@ -117,18 +119,43 @@ window.AZURE_URL = "your-app.azurewebsites.net";
 window.API_KEY   = "your-secret-api-key";
 ```
 
-This file is gitignored and will never be committed.
+**Backend — `.env`** (gitignored, never committed)
 
-To generate a strong API key:
+Copy `.env.example` → `.env` and set the same key:
+
+```
+API_KEY=your-secret-api-key
+```
+
+Both values must match. To generate a strong key:
 ```bash
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
 ---
 
+## Security
+
+All endpoints are protected by an API key and per-IP rate limiting.
+
+| Protection | Detail |
+|---|---|
+| Authentication | `X-API-Key` header required on all HTTP requests |
+| WebSocket auth | `?api_key=` query parameter required |
+| Rate limiting | Per-IP limits on every endpoint (e.g. 10 creates/min for rovers) |
+| Rover cap | Max **10** rovers at a time |
+| Mine cap | Max **50** mines at a time |
+| Map size cap | Max **100×100** grid |
+| Command length | Max **200** characters per rover command sequence |
+| Serial number | Max **50** characters |
+
+---
+
 ## API Reference
 
 All endpoints require the header `X-API-Key: <your-key>`.
+
+Interactive docs (Swagger UI) available at `/docs` when the server is running.
 
 ### Map
 | Method | Endpoint | Description |
