@@ -14,6 +14,36 @@ A RESTful API for controlling autonomous rovers on a configurable grid map, with
 
 ---
 
+## Project Structure
+
+```
+lab4/
+├── app/
+│   ├── main.py          # App factory: middleware, mounts, router registration
+│   ├── auth.py          # API key dependency
+│   ├── limiter.py       # Shared rate limiter instance
+│   ├── models.py        # Pydantic request/response schemas
+│   ├── storage.py       # In-memory state (map, mines, rovers)
+│   ├── rover.py         # Rover movement logic (turn, move, find_mine)
+│   └── routes/
+│       ├── map.py       # GET/PUT /map
+│       ├── mines.py     # CRUD /mines
+│       └── rovers.py    # CRUD /rovers, dispatch, WebSocket
+├── ui/                  # Browser-based operator UI (static HTML/CSS/JS)
+│   ├── index.html
+│   ├── script.js
+│   ├── style.css
+│   ├── config.example.js
+│   └── config.js        # gitignored — copy from config.example.js
+├── docs/                # Project documentation and supplementary files
+├── Dockerfile
+├── requirements.txt
+├── .env.example
+└── .env                 # gitignored — copy from .env.example
+```
+
+---
+
 ## Prerequisites
 
 - [Python 3.10+](https://www.python.org/downloads/)
@@ -48,7 +78,7 @@ cp .env.example .env      # macOS / Linux
 # Edit .env and set a strong API_KEY value
 
 # 6. Run
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) in your browser.
